@@ -200,3 +200,30 @@ body {
   .contextMenu button:hover {
     background-color: #f0f0f0;
   }
+
+/* Контейнер для линий */
+.linesContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* Чтобы линии не перехватывали события мыши */
+}
+
+/* Текстовое поле для заметки */
+.note textarea {
+  width: 100%;
+  height: 100px;
+  border: none;
+  resize: none;
+  font-family: inherit;
+  font-size: 14px;
+  background-color: transparent;
+}
+
+/* Зачеркнутый текст */
+.note textarea[style*="line-through"] {
+  text-decoration: line-through;
+  color: #888; /* Серый цвет для завершенных заметок */
+}
