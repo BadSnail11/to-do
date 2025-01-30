@@ -16,8 +16,15 @@ type Link = {
   to: number; // ID второй заметки
 };
 
+// Ключи для localStorage
+const LOCAL_STORAGE_NOTES_KEY = 'notes';
+const LOCAL_STORAGE_LINKS_KEY = 'links';
+
 export default function Workspace() {
-  const [notes, setNotes] = useState<Note[]>([]); // Состояние для списка заметок
+  // Инициализируем состояние пустыми массивами
+  const [notes, setNotes] = useState<Note[]>([]);
+  const [links, setLinks] = useState<Link[]>([]);
+
   const [draggingNoteId, setDraggingNoteId] = useState<number | null>(null); // Состояние для перетаскиваемой заметки
   const [contextMenu, setContextMenu] = useState<{
     noteId: number;
@@ -25,8 +32,31 @@ export default function Workspace() {
     y: number;
   } | null>(null); // Состояние для контекстного меню
   const [linkingNoteId, setLinkingNoteId] = useState<number | null>(null); // Состояние для заметки, которую связываем
-  const [links, setLinks] = useState<Link[]>([]); // Состояние для связей между заметками
   const [mousePosition, setMousePosition] = useState<{ x: number; y: number } | null>(null); // Позиция курсора
+
+  // Загружаем данные из localStorage при монтировании компонента
+  useEffect(() => {
+    const savedNotes = localStorage.getItem(LOCAL_STORAGE_NOTES_KEY);
+    const savedLinks = localStorage.getItem(LOCAL_STORAGE_LINKS_KEY);
+
+    if (savedNotes) {
+      setNotes(JSON.parse(savedNotes));
+    }
+
+    if (savedLinks) {
+      setLinks(JSON.parse(savedLinks));
+    }
+  }, []);
+
+  // Сохраняем заметки в localStorage при их изменении
+  useEffect(() => {
+    localStorage.setItem(LOCAL_STORAGE_NOTES_KEY, JSON.stringify(notes));
+  }, [notes]);
+
+  // Сохраняем связи в localStorage при их изменении
+  useEffect(() => {
+    localStorage.setItem(LOCAL_STORAGE_LINKS_KEY, JSON.stringify(links));
+  }, [links]);
 
   // Функция для добавления новой заметки
   const addNote = () => {
